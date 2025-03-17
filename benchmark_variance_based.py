@@ -14,6 +14,7 @@ from time import time_ns
 import numpy as np
 import csv
 import json
+import pathlib
 from termination.variance_based.exponent_approximation.genetic_algorithm import estimate_bound_exponent_inductive_bound_genetic
 from sympy import Symbol
 from termination.variance_based.exponent_approximation.genetic_algorithm_config import MinMaxQuadraticAlgorithmConfig, GeneticAlgorithmConfig
@@ -60,5 +61,6 @@ time, witness = perform_experiment(input_data.degree,
 output = BenchmarkOutput(**input_data.model_dump(by_alias=True), time=time, exponent = witness.m, explicit_bound = None if not witness.terminates() or not input_data.exact_n0 else witness.get_exp_stopping_time_bound(1),
                          n0= None if not witness.terminates() or not input_data.exact_n0 else witness.n0)
 
+pathlib.Path(OUTFILE_NAME).parents[0].mkdir(parents=True, exist_ok=True)
 with open(OUTFILE_NAME, "w") as out_fp:
     out_fp.write(output.model_dump_json(by_alias=True))

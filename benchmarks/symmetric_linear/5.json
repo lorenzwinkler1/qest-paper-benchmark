@@ -3,7 +3,7 @@
     "percentage": 0.5,
     "initial": null,
     "exactN0": false,
-    "numGenerations":10,
+    "numGenerations":1,
     "minPopulation":20,
     "maxPopulation":100,
     "populationDecreaseDegree":1,
