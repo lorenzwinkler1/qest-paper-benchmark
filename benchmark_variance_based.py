@@ -27,11 +27,11 @@ N = Symbol("n", integer=True)
 
 
 if len(sys.argv)!=3:
-    raise Exception("Output dir and exactly one benchmark file required")
+    raise Exception("base dir, output dir and exactly one benchmark file required")
 
 OUTPUT_DIR = sys.argv[1]
 FILE = sys.argv[2]
-OUTFILE_NAME = os.path.join(OUTPUT_DIR, os.path.split(FILE)[1])
+OUTFILE_NAME = os.path.join(OUTPUT_DIR, FILE)
 
 with open(FILE) as fp:
     input_data = BenchmarkInput(**json.load(fp))
