@@ -1,0 +1,4 @@
+[submodule "polar"]
+	path = polar
+	url = git@github.com:lorenzwinkler1/polar.git
+	branch = add-amber-methodology
