@@ -1,0 +1,16 @@
+{
+    "degree": 5,
+    "percentage": 0.1,
+    "initial": null,
+    "exactN0": false,
+    "numGenerations":10,
+    "minPopulation":100,
+    "maxPopulation":100,
+    "populationDecreaseDegree":1,
+    "minGranularity": 100,
+    "maxGranularity": 100,
+    "granularityIncreaseDegree":1,
+    "mutationMultiplier": 5,
+    "crossoverMultiplier": 2,
+    "seed":0
+}
