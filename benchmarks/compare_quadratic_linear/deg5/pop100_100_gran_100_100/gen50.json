@@ -12,5 +12,6 @@
     "granularityIncreaseDegree":1,
     "mutationMultiplier": 5,
     "crossoverMultiplier": 2,
-    "seed":0
+    "seed":0,
+    "numRuns":5
 }

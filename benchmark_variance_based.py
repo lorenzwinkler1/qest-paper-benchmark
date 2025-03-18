@@ -50,16 +50,24 @@ def perform_experiment(degree, percentage, geneticAlgorithmConfig: GeneticAlgori
 
     return time_total, witness
 
-time, witness = perform_experiment(input_data.degree, 
-                         input_data.percentage, 
-                         MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
-                                                        input_data.min_population, input_data.max_population,
-                                                        input_data.mutation_multiplier, input_data.crossover_multiplier,
-                                                        input_data.population_decrease_degree,input_data.granularity_increase_degree), input_data.initial, input_data.exact_n0, input_data.seed)
+times = []
+exponents = []
+n0s = []
+explicit_bounds = []
+for i in range(input_data.num_runs):
+    time, witness = perform_experiment(input_data.degree, 
+                            input_data.percentage, 
+                            MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
+                                                            input_data.min_population, input_data.max_population,
+                                                            input_data.mutation_multiplier, input_data.crossover_multiplier,
+                                                            input_data.population_decrease_degree,input_data.granularity_increase_degree), input_data.initial, input_data.exact_n0, input_data.seed)
+    times.append(time)
+    exponents.append(witness.m)
+    explicit_bounds.append(None if not witness.terminates() or not input_data.exact_n0 else witness.get_exp_stopping_time_bound(1))
+    n0s.append(None if not witness.terminates() or not input_data.exact_n0 else witness.n0)
 
-
-output = BenchmarkOutput(**input_data.model_dump(by_alias=True), time=time, exponent = witness.m, explicit_bound = None if not witness.terminates() or not input_data.exact_n0 else witness.get_exp_stopping_time_bound(1),
-                         n0= None if not witness.terminates() or not input_data.exact_n0 else witness.n0)
+output = BenchmarkOutput(**input_data.model_dump(by_alias=True), times=time, exponents = witness.m, explicitBounds=explicit_bounds,
+                         n0s=n0s)
 
 pathlib.Path(OUTFILE_NAME).parents[0].mkdir(parents=True, exist_ok=True)
 with open(OUTFILE_NAME, "w") as out_fp:

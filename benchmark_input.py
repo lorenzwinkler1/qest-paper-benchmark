@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field
 
 class BenchmarkInput(BaseModel):
@@ -16,9 +16,10 @@ class BenchmarkInput(BaseModel):
     seed: int
     mutation_multiplier: int = Field(alias="mutationMultiplier")
     crossover_multiplier: int = Field(alias="crossoverMultiplier")
+    num_runs: int = Field(alias="numRuns")
 
 class BenchmarkOutput(BenchmarkInput):
-    time: float
-    exponent: float
-    explicit_bound: Optional[float] = Field(alias="explicit_bound")
-    n0: Optional[float]
+    times: List[float]
+    exponents: List[float]
+    explicit_bounds: List[Optional[float]] = Field(alias="explicitBounds")
+    n0: List[Optional[float]]
