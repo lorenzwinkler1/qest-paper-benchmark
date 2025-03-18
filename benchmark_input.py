@@ -22,4 +22,16 @@ class BenchmarkOutput(BenchmarkInput):
     times: List[float]
     exponents: List[float]
     explicit_bounds: List[Optional[float]] = Field(alias="explicitBounds")
-    n0: List[Optional[float]]
+    n0s: List[Optional[float]]
+
+    @classmethod
+    def csv_header(cls):
+        return ('degree', 'percentage', 'initial', 'exact_n0', 'num_generations', 'min_population', 'max_population', 
+                'population_decrease_degree', 'min_granularity', 'max_granularity', 'granularity_increase_degree',
+                'seed', 'mutation_multiplier', 'crossover_multiplier', 'time', 'exponent', 'explicit_bound', 'n0', 'i')
+    
+    def csv_rows(self):
+        for i,(time, exponent, explicit_bound, n0) in enumerate(zip(self.times, self.exponents, self.explicit_bounds, self.n0s)):
+            yield (self.degree, self.percentage, self.initial, self.exact_n0, self.num_generations, self.min_population, self.max_population,
+                    self.population_decrease_degree, self.min_granularity, self.max_granularity, self.granularity_increase_degree, self.seed, self.mutation_multiplier,
+                    self.crossover_multiplier, time, exponent, explicit_bound, n0, i)

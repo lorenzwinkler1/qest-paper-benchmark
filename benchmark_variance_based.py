@@ -54,19 +54,20 @@ times = []
 exponents = []
 n0s = []
 explicit_bounds = []
+rng = np.random.default_rng(input_data.seed)
 for i in range(input_data.num_runs):
     time, witness = perform_experiment(input_data.degree, 
                             input_data.percentage, 
                             MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
                                                             input_data.min_population, input_data.max_population,
                                                             input_data.mutation_multiplier, input_data.crossover_multiplier,
-                                                            input_data.population_decrease_degree,input_data.granularity_increase_degree), input_data.initial, input_data.exact_n0, input_data.seed)
+                                                            input_data.population_decrease_degree,input_data.granularity_increase_degree), input_data.initial, input_data.exact_n0, int(rng.random()*1e16))
     times.append(time)
     exponents.append(witness.m)
     explicit_bounds.append(None if not witness.terminates() or not input_data.exact_n0 else witness.get_exp_stopping_time_bound(1))
     n0s.append(None if not witness.terminates() or not input_data.exact_n0 else witness.n0)
 
-output = BenchmarkOutput(**input_data.model_dump(by_alias=True), times=time, exponents = witness.m, explicitBounds=explicit_bounds,
+output = BenchmarkOutput(**input_data.model_dump(by_alias=True), times=times, exponents = exponents, explicitBounds=explicit_bounds,
                          n0s=n0s)
 
 pathlib.Path(OUTFILE_NAME).parents[0].mkdir(parents=True, exist_ok=True)
