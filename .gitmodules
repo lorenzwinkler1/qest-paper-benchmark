@@ -1,4 +1,4 @@
 [submodule "polar"]
-	path = polar
+	path = genetic_algoritm/polar
 	url = git@github.com:lorenzwinkler1/polar.git
 	branch = add-amber-methodology

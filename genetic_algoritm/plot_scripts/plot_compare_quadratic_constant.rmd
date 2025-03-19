@@ -1,0 +1,48 @@
+```{r}
+library(MASS)
+library(ggplot2)
+library(cowplot)
+library(dplyr)
+
+```
+
+
+```{r}
+data = read.csv("output_quadratic_constant.csv")
+
+str(data)
+```
+
+
+```{r}
+rearranged_data = data%>% 
+  group_by(num_generations, min_population, max_population, min_granularity, max_granularity) %>%
+  summarise(
+    min_exp = min(exponent),
+    max_exp = max(exponent),
+    mean_exp = mean(exponent),
+    min_time = min(time),
+    max_time = max(time),
+    mean_time = mean(time),
+  ) %>%mutate(ColorGroup =paste0(min_population,"_" ,max_population, "_",min_granularity,"_", max_granularity))
+
+rearranged_data
+```
+
+
+```{r}
+ggplot(rearranged_data) +
+  geom_line(aes(num_generations, mean_exp, color=ColorGroup))+
+  geom_ribbon(aes(num_generations,ymin =min_exp, ymax = max_exp, fill=ColorGroup),alpha=0.1) +
+  theme_half_open()+
+  scale_y_continuous()
+```
+
+
+```{r}
+ggplot(rearranged_data[]) +
+  geom_line(aes(num_generations, mean_time, color=ColorGroup))+
+  geom_ribbon(aes(num_generations,ymin =min_time, ymax = max_time, fill=ColorGroup),alpha=0.1) +
+  theme_half_open()+
+  scale_y_continuous()
+```
