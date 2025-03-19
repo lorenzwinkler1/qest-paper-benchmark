@@ -1,0 +1,9 @@
+{
+    "q1":"n",
+    "q2":"-n",
+    "p": 0.5,
+    "sample_size":1e6,
+    "initial_value": 100,
+    "max_iterations":1e10,
+    "seed":1
+}

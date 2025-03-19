@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "genetic_algorithm/polar",
+        "./genetic_algoritm/polar"
+    ]
+}

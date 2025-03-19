@@ -28,7 +28,7 @@ N = Symbol("n", integer=True)
 
 
 if len(sys.argv)!=3:
-    raise Exception("base dir, output dir and exactly one benchmark file required")
+    raise Exception("output dir and exactly one benchmark file required")
 
 OUTPUT_DIR = sys.argv[1]
 FILE = sys.argv[2]

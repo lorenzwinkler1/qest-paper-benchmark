@@ -1,0 +1,9 @@
+{
+    "q1":"n**2+2*n+20",
+    "q2":"-n**2+2*n+20",
+    "p": 0.5,
+    "sample_size":1e8,
+    "initial_value": 1000,
+    "max_iterations":1e10,
+    "seed":0
+}
