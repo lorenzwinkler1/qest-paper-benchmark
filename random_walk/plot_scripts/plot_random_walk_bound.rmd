@@ -39,12 +39,12 @@ p <- ggplot(data_lin_10000) +
   geom_line(data=data_lin_1000,aes(x=i, y=p_t, color="initial1000"))+
   geom_line(data=data_lin_100,aes(x=i, y=p_t, color="initial100"))+
   geom_line(data=data_lin_10,aes(x=i, y=p_t, color="initial10"))+
-  geom_line(aes(x=i, y=exp(predict(reg_lin_10000,data.frame(i = i))), color="initial10000"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_lin_1000,data.frame(i = i))), color="initial1000"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_lin_100,data.frame(i = i))), color="initial100"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_lin_10,data.frame(i = i))), color="initial10"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_lin_10000,data.frame(i = i))), color="initial10000"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_lin_1000,data.frame(i = i))), color="initial1000"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_lin_100,data.frame(i = i))), color="initial100"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_lin_10,data.frame(i = i))), color="initial10"), linetype=2)+
   scale_x_log10()+
-  xlab("t")+
+  xlab("n")+
   ylab("survival rate")+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.000001, 10))+
@@ -105,15 +105,15 @@ p <- ggplot(data_imb_2n) +
   geom_line(data=data_imb_n,aes(x=i, y=p_t, color="imbn"))+
   geom_line(data=data_imb_const,aes(x=i, y=p_t, color="imbconst"))+
   geom_line(data=data_imb_sym,aes(x=i, y=p_t, color="imbsym"))+
-  geom_line(aes(x=i, y=exp(predict(reg_imb_2n,data.frame(i = i))), color="imb2n"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_imb_n,data.frame(i = i))), color="imbn"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_imb_const,data.frame(i = i))), color="imbconst"), linetype=2)+
-  geom_line(aes(x=i, y=exp(predict(reg_imb_sym,data.frame(i = i))), color="imbsym"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_imb_2n,data.frame(i = i))), color="imb2n"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_imb_n,data.frame(i = i))), color="imbn"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_imb_const,data.frame(i = i))), color="imbconst"), linetype=2)+
+  # geom_line(aes(x=i, y=exp(predict(reg_imb_sym,data.frame(i = i))), color="imbsym"), linetype=2)+
   scale_x_log10()+
-  xlab("t")+
+  xlab("n")+
   ylab("survival rate")+
   labs(color=NULL)+
-  scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.0000001, 10))+
+  scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
     "imb2n"="#E63946",
     "imbn"="#F4A261",
@@ -132,4 +132,132 @@ p <- ggplot(data_imb_2n) +
 
 print(p)
 ggsave("imbalance_plot.pdf",width=7, height=5)
+```
+
+
+
+# Slope change
+
+
+```{r}
+data1 <- read.csv("../output/inputs/slope_change/test1.json.csv")
+data2 <- read.csv("../output/inputs/slope_change/test2.json.csv")
+data3 <- read.csv("../output/inputs/slope_change/test3.json.csv")
+
+data1 = data1[data1$i>0 &data1$p_t>0,]
+data2 = data2[data2$i>0 &data2$p_t>0,]
+data3 = data3[data3$i>0 &data3$p_t>0,]
+
+
+```
+
+
+## Perform robust linear regression
+
+```{r}
+```
+
+
+```{r}
+p <- ggplot(data1) +
+  geom_line(data=data2,aes(x=i, y=p_t, color="cubic"))+
+  geom_line(data=data3,aes(x=i, y=p_t, color="linear"))+
+  geom_line(aes(x=i, y=p_t, color="mixture"))+
+  scale_x_log10()+
+  xlab("n")+
+  ylab("survival rate")+
+  labs(color=NULL)+
+  scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.00001, 10))+
+  scale_color_manual(values = c(
+    "cubic"="#E63946",
+    "linear"="#F4A261",
+    "mixture"="#2A9D8F",
+    "_"="#8E44AD"
+  ),
+  labels = c(
+    "cubic"=expression("\u00B1"~n^{3}), 
+    "linear"=expression("\u00B1"~10^{6}*n), 
+    "mixture"=expression("\u00B1"~(n^{3}+10^{6}*n)), 
+    "_"=expression(E(X[n])~"="~0)
+  )) +
+  guides(color=guide_legend(reverse = FALSE))+
+  theme_half_open()+
+  theme(legend.position="inside",legend.position.inside=c(0.75,0.85))
+
+print(p)
+ggsave("slope_change.pdf",width=7, height=5)
+```
+
+
+
+# Termination-cutoff-analysis
+```{r}
+data1 <- read.csv("../output/inputs/termination_boundary/lin.json.csv")
+data2 <- read.csv("../output/inputs/termination_boundary/sqrt.json.csv")
+data3 <- read.csv("../output/inputs/termination_boundary/qubicroot.json.csv")
+data4 <- read.csv("../output/inputs/termination_boundary/quadr.json.csv")
+data5 <- read.csv("../output/inputs/termination_boundary/pow5.json.csv")
+
+data1 = data1[data1$i>0 &data1$p_t>0,]
+data2 = data2[data2$i>0 &data2$p_t>0,]
+data3 = data3[data3$i>0 &data3$p_t>0,]
+data4 = data4[data4$i>0 &data4$p_t>0,]
+data5 = data5[data5$i>0 &data5$p_t>0,]
+```
+
+
+## Perform robust linear regression
+
+```{r}
+reg1 = rlm(log(p_t)~log(i), data=data1[data1$i>1e3 & data1$i<1e5,], weights=1/i)
+reg2 = rlm(log(p_t)~log(i), data=data2[data2$i>1e3 & data2$i<1e5,], weights=1/i)
+reg3 = rlm(log(p_t)~log(i), data=data3[data3$i>1e3 & data3$i<1e5,], weights=1/i)
+reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>1e3 & data4$i<1e5,], weights=1/i)
+reg5 = rlm(log(p_t)~log(i), data=data5[data5$i>12 & data5$i<1e3,], weights=1/i)
+
+reg1
+reg2
+reg3
+reg4
+reg5
+```
+
+
+```{r}
+p <- ggplot(data1) +
+  geom_line(data=data2,aes(x=i, y=p_t, color="sqrt"))+
+  geom_line(data=data3,aes(x=i, y=p_t, color="4rt"))+
+  geom_line(aes(x=i, y=p_t, color="linear"))+
+  geom_line(data=data4,aes(x=i, y=p_t, color="quadr"))+
+  geom_line(data=data5,aes(x=i, y=p_t, color="pow5"))+
+  stat_function(fun = function(x) {r=x^(reg2$coefficients[2])*exp(reg2$coefficients[1]); return(r)}, aes(color="sqrt"),linetype="dashed")+
+  stat_function(fun = function(x) {r=x^(reg1$coefficients[2])*exp(reg1$coefficients[1]); return(r)}, aes(color="linear"),linetype="dashed")+
+  stat_function(fun = function(x) {r=x^(reg3$coefficients[2])*exp(reg3$coefficients[1]); return(r)}, aes(color="4rt"),linetype="dashed")+
+ stat_function(fun = function(x) {r=x^(reg4$coefficients[2])*exp(reg4$coefficients[1]); return(r)}, aes(color="quadr"),linetype="dashed")+
+ stat_function(fun = function(x) {r=x^(reg5$coefficients[2])*exp(reg5$coefficients[1]); return(r)}, aes(color="pow5"),linetype="dashed")+
+  scale_x_log10()+
+  xlab("n")+
+  ylab("survival rate")+
+  labs(color=NULL)+
+  scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.00001, 10))+
+  scale_color_manual(values = c(
+    "linear"="#E63946",
+    "sqrt"="#F4A261",
+    "4rt"="#2A9D8F",
+    "quadr"="#8E44AD",
+    "pow5"="#1D3557"
+  ),
+  labels = c(
+    "linear"=expression("\u00B1"~n), 
+    "sqrt"=expression("\u00B1"~sqrt(n)), 
+    "4rt"=expression("\u00B1"~root(n,4)), 
+    "quadr"=expression("\u00B1"~n^{2}),
+    "pow5"=expression("\u00B1"~n^{5})
+  )) +
+  guides(color=guide_legend(reverse = FALSE))+
+  theme_half_open()+
+  theme(legend.position="inside",legend.position.inside=c(0.75,0.85))
+
+print(p)
+ggsave("termination_boundary.pdf",width=7, height=5)
 ```
