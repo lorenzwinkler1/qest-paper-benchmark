@@ -47,7 +47,7 @@ p <- ggplot(data_lin_10000) +
   xlab("n")+
   ylab("survival rate")+
   labs(color=NULL)+
-  scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.000001, 10))+
+  scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
     "initial10000"="#E63946",
     "initial1000"="#F4A261",

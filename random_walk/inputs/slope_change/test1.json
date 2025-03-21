@@ -5,5 +5,5 @@
     "sample_size":1e7,
     "initial_value": 100000000,
     "max_iterations":1e10,
-    "seed":2
+    "seed":1
 }
