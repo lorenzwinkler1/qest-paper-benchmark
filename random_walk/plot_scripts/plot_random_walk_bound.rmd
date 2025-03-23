@@ -212,7 +212,7 @@ data5 = data5[data5$i>0 &data5$p_t>0,]
 reg1 = rlm(log(p_t)~log(i), data=data1[data1$i>1e3 & data1$i<1e5,], weights=1/i)
 reg2 = rlm(log(p_t)~log(i), data=data2[data2$i>1e3 & data2$i<1e5,], weights=1/i)
 reg3 = rlm(log(p_t)~log(i), data=data3[data3$i>1e3 & data3$i<1e5,], weights=1/i)
-reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>1e3 & data4$i<1e5,], weights=1/i)
+reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>2e2 & data4$i<1e3,], weights=1/i)
 reg5 = rlm(log(p_t)~log(i), data=data5[data5$i>12 & data5$i<1e3,], weights=1/i)
 
 reg1
