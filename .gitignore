@@ -1,5 +1,7 @@
 output/*
 random_walk/output/*
+genetic_algorithm/generated_benchmarks/*
+genetic_algorithm/output/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
