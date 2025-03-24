@@ -2,8 +2,11 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 class BenchmarkInput(BaseModel):
-    degree: int
+    id: int
+    q1: str
+    q2: str
     percentage: float
+
     initial: Optional[float]
     exact_n0: bool = Field(alias="exactN0")
     num_generations: int = Field(alias="numGenerations")
@@ -26,12 +29,12 @@ class BenchmarkOutput(BenchmarkInput):
 
     @classmethod
     def csv_header(cls):
-        return ('degree', 'percentage', 'initial', 'exact_n0', 'num_generations', 'min_population', 'max_population', 
+        return ('id', "q1","q2", 'percentage', 'initial', 'exact_n0', 'num_generations', 'min_population', 'max_population', 
                 'population_decrease_degree', 'min_granularity', 'max_granularity', 'granularity_increase_degree',
                 'seed', 'mutation_multiplier', 'crossover_multiplier', 'time', 'exponent', 'explicit_bound', 'n0', 'i')
     
     def csv_rows(self):
         for i,(time, exponent, explicit_bound, n0) in enumerate(zip(self.times, self.exponents, self.explicit_bounds, self.n0s)):
-            yield (self.degree, self.percentage, self.initial, self.exact_n0, self.num_generations, self.min_population, self.max_population,
+            yield (self.id, self.q1, self.q2, self.percentage, self.initial, self.exact_n0, self.num_generations, self.min_population, self.max_population,
                     self.population_decrease_degree, self.min_granularity, self.max_granularity, self.granularity_increase_degree, self.seed, self.mutation_multiplier,
                     self.crossover_multiplier, time, exponent, explicit_bound, n0, i)
