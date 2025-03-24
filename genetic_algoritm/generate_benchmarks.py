@@ -63,7 +63,7 @@ for (j,(num_generations, min_population, max_population, population_decrease_deg
         for i in range(NUM_RUNS):
             curr_seed+=2
             input = BenchmarkInput(
-              id=id, q1 = q2, q2=q2, percentage=p, initial = initial, exactN0 = False, numGenerations=num_generations,
+              id=id, q1 = q1, q2=q2, percentage=p, initial = initial, exactN0 = False, numGenerations=num_generations,
               minPopulation=min_population, maxPopulation=max_population, populationDecreaseDegree=population_decrease_degree,
               minGranularity=min_granularity, maxGranularity=max_granularity, granularityIncreaseDegree=granularity_increase_degree,
               seed = curr_seed, mutationMultiplier=mutation_multiplier,crossoverMultiplier=crossover_multiplier, numRuns=1

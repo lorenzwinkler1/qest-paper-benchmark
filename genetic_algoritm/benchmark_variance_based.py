@@ -39,6 +39,8 @@ with open(FILE) as fp:
 
 
 def perform_experiment(q1, percentage, q2, geneticAlgorithmConfig: GeneticAlgorithmConfig, initial, exact_n0, seed):
+    print(q1)
+    print(q2)
     time_start = time_ns()
     
     witness = estimate_bound_exponent_inductive_bound_genetic(percentage, geneticAlgorithmConfig, q1, q2, initial,
@@ -54,9 +56,9 @@ n0s = []
 explicit_bounds = []
 rng = np.random.default_rng(input_data.seed)
 for i in range(input_data.num_runs):
-    time, witness = perform_experiment(sympify(input_data.q1),
+    time, witness = perform_experiment(sympify(input_data.q1, locals={'n': N}),
                                        input_data.percentage,
-                                       sympify(input_data.q2),
+                                       sympify(input_data.q2, locals={'n': N}),
                             MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
                                                             input_data.min_population, input_data.max_population,
                                                             input_data.mutation_multiplier, input_data.crossover_multiplier,
