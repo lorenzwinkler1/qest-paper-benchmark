@@ -16,7 +16,7 @@ import csv
 import json
 import pathlib
 from termination.variance_based.exponent_approximation.genetic_algorithm import estimate_bound_exponent_inductive_bound_genetic
-from sympy import Symbol
+from sympy import Symbol, sympify
 from termination.variance_based.exponent_approximation.genetic_algorithm_config import MinMaxQuadraticAlgorithmConfig, GeneticAlgorithmConfig
 
 
@@ -38,10 +38,8 @@ with open(FILE) as fp:
     input_data = BenchmarkInput(**json.load(fp))
 
 
-def perform_experiment(degree, percentage, geneticAlgorithmConfig: GeneticAlgorithmConfig, initial, exact_n0, seed):
+def perform_experiment(q1, percentage, q2, geneticAlgorithmConfig: GeneticAlgorithmConfig, initial, exact_n0, seed):
     time_start = time_ns()
-    q1 = N**degree/(1-percentage)
-    q2 = N**degree/(percentage)
     
     witness = estimate_bound_exponent_inductive_bound_genetic(percentage, geneticAlgorithmConfig, q1, q2, initial,
                                                               exact_n0 = exact_n0, seed=seed)
@@ -56,8 +54,9 @@ n0s = []
 explicit_bounds = []
 rng = np.random.default_rng(input_data.seed)
 for i in range(input_data.num_runs):
-    time, witness = perform_experiment(input_data.degree, 
-                            input_data.percentage, 
+    time, witness = perform_experiment(sympify(input_data.q1),
+                                       input_data.percentage,
+                                       sympify(input_data.q2),
                             MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
                                                             input_data.min_population, input_data.max_population,
                                                             input_data.mutation_multiplier, input_data.crossover_multiplier,
