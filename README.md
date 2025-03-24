@@ -2,12 +2,18 @@ This repo serves as a benchmark suite for the variance-based-termination of pola
 
 
 # Genetic algorithm
+First generate the benchmark data:
+```
+cd genetic_algorithm
+mkdir generated_benchmarks
+python generate_benchmarks.py
+```
+
+
 To call all benchmarks, one might use the task spooler:
 
 ```
-cd genetic_algorithm
-
-find benchmarks/ -name "*.json" | xargs -I{} tsp python benchmark_variance_based.py output {}
+find generated_benchmarks/ -name "*.json" | xargs -I{} tsp python benchmark_variance_based.py output {}
 ```
 
 To create a csv file (e.g. for plotting):
