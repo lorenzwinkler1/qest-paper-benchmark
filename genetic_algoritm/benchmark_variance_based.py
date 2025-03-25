@@ -24,7 +24,7 @@ c_0 = 10e-7
 delta_1 = 10e-5
 delta_prime = 10e-5
 NUM_REPETITIONS = 10
-N = Symbol("n", integer=True)
+N = Symbol("n", integer=True, positive=True)
 
 
 if len(sys.argv)!=3:
