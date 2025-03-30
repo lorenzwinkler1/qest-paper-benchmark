@@ -261,3 +261,71 @@ p <- ggplot(data1) +
 print(p)
 ggsave("termination_boundary.pdf",width=7, height=5)
 ```
+
+
+
+
+# Different p
+
+
+
+```{r}
+data1 <- read.csv("../output/inputs/different_p/sym.json.csv")
+data2 <- read.csv("../output/inputs/different_p/1e-1_L.json.csv")
+data3 <- read.csv("../output/inputs/different_p/1e-1_R.json.csv")
+data4 <- read.csv("../output/inputs/different_p/1e-2_L.json.csv")
+data5 <- read.csv("../output/inputs/different_p/1e-2_R.json.csv")
+data6 <- read.csv("../output/inputs/different_p/1e-3_L.json.csv")
+data7 <- read.csv("../output/inputs/different_p/1e-3_R.json.csv")
+
+data1 = data1[data1$i>0 &data1$p_t>0,]
+data2 = data2[data2$i>0 &data2$p_t>0,]
+data3 = data3[data3$i>0 &data3$p_t>0,]
+data4 = data4[data4$i>0 &data4$p_t>0,]
+data5 = data5[data5$i>0 &data5$p_t>0,]
+data6 = data6[data6$i>0 &data6$p_t>0,]
+data7 = data7[data7$i>0 &data7$p_t>0,]
+
+
+```
+
+
+```{r}
+p <- ggplot(data1) +
+  geom_line(aes(x=i, y=p_t, color="sym"), linetype=2)+
+  geom_line(data=data2,aes(x=i, y=p_t, color="1L"), linetype=2)+
+  geom_line(data=data3,aes(x=i, y=p_t, color="1R"))+
+  geom_line(data=data4,aes(x=i, y=p_t, color="2L"), linetype=2)+
+  geom_line(data=data5,aes(x=i, y=p_t, color="2R"))+
+  geom_line(data=data6,aes(x=i, y=p_t, color="3L"), linetype=2)+
+  geom_line(data=data7,aes(x=i, y=p_t, color="3R"))+
+  scale_x_log10()+
+  xlab("n")+
+  ylab("survival rate")+
+  labs(color=NULL)+
+  scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.000001, 10))+
+  scale_color_manual(values = c(
+    "sym"="#E63946",
+    "1L"="#F4A261",
+    "1R"="#F4A261",
+    "2L"="#2A9D8F",
+    "2R"="#2A9D8F",
+    "3L"="#8E44AD",
+    "3R"="#8E44AD"
+  ),
+  labels = c(
+    "sym"=expression(p~"="~0.5),
+    "1L"= expression(p~"="~0.9),
+    "1R"=expression(p~"="~0.1),
+    "2L"=expression(p~"="~0.99),
+    "2R"=expression(p~"="~0.01),
+    "3L"=expression(p~"="~0.999),
+    "3R"=expression(p~"="~0.001)
+  )) +
+  guides(color=guide_legend(reverse = FALSE))+
+  theme_half_open()+
+  theme(legend.position="inside",legend.position.inside=c(0.75,0.7))
+
+print(p)
+```
+
