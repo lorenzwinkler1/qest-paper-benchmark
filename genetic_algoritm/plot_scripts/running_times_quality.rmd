@@ -17,7 +17,7 @@ data <- data
 
 ```{r}
 rearranged_data = data%>% 
-  group_by(q1) %>%
+  group_by(q1,percentage) %>%
   summarise(
     min_exp = min(exponent),
     max_exp = max(exponent),
@@ -25,7 +25,9 @@ rearranged_data = data%>%
     min_time = min(time),
     max_time = max(time),
     mean_time = mean(time),
-  ) 
+  ) %>% select(min_exp, q1, percentage)
+
+rearranged_data
 ```
 
 ```{r}

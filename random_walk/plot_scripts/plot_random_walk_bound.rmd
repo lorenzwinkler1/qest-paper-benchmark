@@ -289,6 +289,30 @@ data7 = data7[data7$i>0 &data7$p_t>0,]
 
 ```
 
+```{r}
+reg1 = rlm(log(p_t)~log(i), data=data1[data1$i>1e3 & data1$p_t>1e-6,], weights=1/i)
+reg2 = rlm(log(p_t)~log(i), data=data2[data2$i>7e3 & data2$p_t>1e-6,], weights=1/i)
+reg3 = rlm(log(p_t)~log(i), data=data3[data3$i>1e3 & data3$p_t>1e-6,], weights=1/i)
+reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>3e3 & data4$p_t>1e-6,], weights=1/i)
+reg5 = rlm(log(p_t)~log(i), data=data5[data5$i>8e2 & data5$p_t>1e-6,], weights=1/i)
+reg6 = rlm(log(p_t)~log(i), data=data6[data6$i>1e4 & data6$p_t>1e-6,], weights=1/i)
+reg7 = rlm(log(p_t)~log(i), data=data7[data7$i>1e3 & data7$p_t>1e-6,], weights=1/i)
+reg1
+```
+```{r}
+reg2
+reg3
+```
+
+```{r}
+reg4
+reg5
+```
+```{r}
+reg6
+reg7
+```
+
 
 ```{r}
 p <- ggplot(data1) +
@@ -299,6 +323,8 @@ p <- ggplot(data1) +
   geom_line(data=data5,aes(x=i, y=p_t, color="2R"))+
   geom_line(data=data6,aes(x=i, y=p_t, color="3L"), linetype=2)+
   geom_line(data=data7,aes(x=i, y=p_t, color="3R"))+
+  #stat_function(fun = function(x) {r=x^(reg6$coefficients[2])*exp(reg6$coefficients[1]); return(r)}, aes(color="sqrt"))+
+  #stat_function(fun = function(x) {r=x^(reg7$coefficients[2])*exp(reg7$coefficients[1]); return(r)}, aes(color="linear"))+
   scale_x_log10()+
   xlab("n")+
   ylab("survival rate")+
@@ -327,5 +353,6 @@ p <- ggplot(data1) +
   theme(legend.position="inside",legend.position.inside=c(0.75,0.7))
 
 print(p)
+ggsave("different_percentages.pdf",width=7, height=5)
 ```
 
