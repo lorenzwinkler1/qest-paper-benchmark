@@ -1,1 +1,0 @@
-{"degree":1,"percentage":0.5,"initial":null,"exactN0":false,"numGenerations":10,"minPopulation":20,"maxPopulation":100,"populationDecreaseDegree":1.0,"minGranularity":40,"maxGranularity":200,"granularityIncreaseDegree":1.0,"seed":0,"mutationMultiplier":5,"crossoverMultiplier":2,"time":55533.119824,"exponent":-1.0449007448269345,"explicit_bound":null,"n0":null}
