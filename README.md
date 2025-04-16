@@ -25,12 +25,12 @@ The image has the tag `polynomial-random-walks:latest`
 
 # Running the tool
 
-The tool leverages a linear solver. This can be passed via the `--solver` flag. Any value, which is accepted by [OR-tools](https://developers.google.com/optimization), can be passed here, but we require great numerical stability, hence some solvers (e.g. `GLOP`) do not work as desired. The default solver is `CLP`, as it can be used without installation, and performs quite stable. The faster solver `GUROBI` was used for the experimental results in our paper, and you can find information to install it below.
+The tool leverages a linear solver. This can be passed via the `--solver` flag. Any value, which is accepted by [OR-tools](https://developers.google.com/optimization), can be passed here, but we require great numerical stability, hence some solvers do not work as desired. The default solver is `CLP`, as it can be used without installation, and performs quite stable. The faster solver `GUROBI` was used for the experimental results in our paper, and you can find information to install it below.
 
 The tool can be invoked with `CLP` using:
 
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
+docker run --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
 ```
 
 Or when using gurobi:
@@ -44,6 +44,23 @@ docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src
 ```
 
 Notice the mount of the `example`-folder: Here you can add polynomial random walks, or have a look at some of our example.
+
+## Command-Line flags
+
+The following flags can be used for our termination tool:
+
+- `--termination_variance` Required to start the termination-action in polar
+- `--exact` Polar tries to find an explicit bound
+- `--solver` Set the linear solver
+- `--seed` For reproducability
+
+Additionally, the genetic algorithm can be controlled.
+Most importantly, there are the flags
+- `--num_generations` Number of generations (default 20).
+- `--mutation_rate` Number of mutations (default 5, i.e. 5 times the population size of new mutated entries per iteration)
+- `--crossover_rate` Number of crossovers (default 2, i.e. 2 times the popoulation size of new children with two random parents each)
+- `--min_pop` (default 20), `--max_pop` (100) and `--degree_population_shrink` (1): The population size, decreasing from `max_pop` to `min_pop` over the number of generations, as a function of degree `degree_population_shrink`.
+- `--min_gran` (default 40), `--max_gran` (200) and `--degree_granularity_growth` (1): The population size, increasing from `min_gran` to `max_gran` over the number of generations, as a function of degree `degree_granularity_growth`.
 
 # Reproducing our results
 Our results can be reproduced, however we used the commercial solver `GUROBI` in our paper, for which a license must be obtained.
