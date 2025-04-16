@@ -8,7 +8,7 @@ The tool itself is also available [in the termination branch of polar](https://g
 - `genetic_algorithm/` A folder containing the python and R source code for running the experiments involving polar (also the actual tool, `polar`, hence our source code is contained as a submodule)
 - `random_walk/` A folder containing the python and R source code for running the random walk experiments
 - `artifactcontainer.tar` The saved docker image (only container in artifact, not in git repository)
-- `README.md` This file containing information how to run the submission, and how to reproduce our content from the paper
+- `README.md` This file, it contains information how to run the submission, and how to reproduce our content from the paper
 - `License`
 - `Dockerfile` A file to rebuild the image `artifactcontainer.tar`
 - `run_all_jobs.sh` A file to invoke all experiments using `polar`
