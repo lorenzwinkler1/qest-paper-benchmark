@@ -45,7 +45,7 @@ p <- ggplot(data_lin_10000) +
   # geom_line(aes(x=i, y=exp(predict(reg_lin_10,data.frame(i = i))), color="initial10"), linetype=2)+
   scale_x_log10()+
   xlab("n")+
-  ylab("survival rate")+
+  ylab(expression(bold(P) (T >= n)))+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
@@ -111,7 +111,7 @@ p <- ggplot(data_imb_2n) +
   # geom_line(aes(x=i, y=exp(predict(reg_imb_sym,data.frame(i = i))), color="imbsym"), linetype=2)+
   scale_x_log10()+
   xlab("n")+
-  ylab("survival rate")+
+  ylab(expression(bold(P) (T >= n)))+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
@@ -165,7 +165,7 @@ p <- ggplot(data1) +
   geom_line(aes(x=i, y=p_t, color="mixture"))+
   scale_x_log10()+
   xlab("n")+
-  ylab("survival rate")+
+  ylab(expression(bold(P) (T >= n)))+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
@@ -237,7 +237,7 @@ p <- ggplot(data1) +
  stat_function(fun = function(x) {r=x^(reg5$coefficients[2])*exp(reg5$coefficients[1]); return(r)}, aes(color="pow5"),linetype="dashed")+
   scale_x_log10()+
   xlab("n")+
-  ylab("survival rate")+
+  ylab(expression(bold(P) (T >= n)))+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.0001,0.01,1), limits=c(0.00001, 10))+
   scale_color_manual(values = c(
@@ -327,7 +327,7 @@ p <- ggplot(data1) +
   #stat_function(fun = function(x) {r=x^(reg7$coefficients[2])*exp(reg7$coefficients[1]); return(r)}, aes(color="linear"))+
   scale_x_log10()+
   xlab("n")+
-  ylab("survival rate")+
+  ylab(expression(bold(P) (T >= n)))+
   labs(color=NULL)+
   scale_y_log10(labels=percent, breaks=c(0.000001,0.0001,0.01,1), limits=c(0.000001, 10))+
   scale_color_manual(values = c(
