@@ -58,4 +58,6 @@ RUN mkdir genetic_algorithm/generated_benchmarks
 
 COPY random_walk/*.py random_walk/
 
+run mkdir /opt/gurobi
+
 CMD [ "", "./your-daemon-or-script.py" ]
