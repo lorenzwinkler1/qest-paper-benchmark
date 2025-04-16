@@ -1,12 +1,14 @@
 #!/bin/bash
 
-echo "Scheduling jobs with tsp..."
+echo "Scheduling jobs with tsp. Num simultaneous jobs: $2"
 
-find genetic_algorithm/generated_benchmarks/ -name "*0_asymp.json" | xargs -I{} tsp python genetic_algorithm/benchmark_variance_based.py output {}
+tsp -S $2
+
+find genetic_algorithm/generated_benchmarks/ -name "*.json" | xargs -I{} tsp python genetic_algorithm/benchmark_variance_based.py $1 output {}
 
 echo "Waiting for all jobs to finish..."
 
-tsp -S $1
+
 
 while true; do
     queued=$(tsp | grep -c queued)
