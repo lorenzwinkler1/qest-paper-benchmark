@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "Scheduling jobs with tsp. Num simultaneous jobs: $2"
+echo "Scheduling jobs with tsp. Num simultaneous jobs: $1"
 
-tsp -S $2
+tsp -S $1
 
-find genetic_algorithm/generated_benchmarks/ -name "*.json" | xargs -I{} tsp python genetic_algorithm/benchmark_variance_based.py $1 output {}
+find random_walk/inputs/ -name "*.json" | xargs -I{} tsp python random_walk/empirical_bound_p_t.py output {}
 
 echo "Waiting for all jobs to finish..."
 
@@ -24,7 +24,7 @@ while true; do
         break
     fi
 
-    sleep 10
+    sleep 20
 done
 
 echo "All $finished jobs finished!"
