@@ -25,8 +25,25 @@ The image has the tag `polynomial-random-walks:latest`
 
 # Running the tool
 
-The tool leverages a linear solver. This can be passed via the `--solver` flag, and
+The tool leverages a linear solver. This can be passed via the `--solver` flag. Any value, which is accepted by [OR-tools](https://developers.google.com/optimization), can be passed here, but we require great numerical stability, hence some solvers (e.g. `GLOP`) do not work as desired. The default solver is `CLP`, as it can be used without installation, and performs quite stable. The faster solver `GUROBI` was used for the experimental results in our paper, and you can find information to install it below.
 
+The tool can be invoked with `CLP` using:
+
+```
+docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
+```
+
+Or when using gurobi:
+```
+docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
+```
+
+When you want to compute an `explicit` bound, you need to additionally pass the `--exact` flag:
+```
+docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance --exact
+```
+
+Notice the mount of the `example`-folder: Here you can add polynomial random walks, or have a look at some of our example.
 
 # Reproducing our results
 Our results can be reproduced, however we used the commercial solver `GUROBI` in our paper, for which a license must be obtained.
