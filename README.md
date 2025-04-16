@@ -23,6 +23,27 @@ To create a csv file (e.g. for plotting):
 find output/benchmarks/ -name "*.json" | python gather_benchmark_data.py > output.csv
 ```
 
+# Setting up the Gurobi license
+
+A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
+
+- Create an account on gurobi.com with your academic E-Mail Adress
+- Via https://portal.gurobi.com/iam/licenses/request request a WLS academic license. 
+- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download, to obtain an api-key.
+- You get a license file containing the following three lines:
+```
+WLSACCESSID=<access-id>
+WLSSECRET=<secret>
+LICENSEID=<license-id>
+```
+- copy this license file to your working directory
+- This file can be directly used as an environment variable file. Just make sure, that whenever running `docker run`, to include the following argument: `--env-file gurobi.lic` 
+
+```
+docker run qestcontainer:latest 
+```
+
+
 # Reproducing our results
 
 ## Generate the benchmarks
