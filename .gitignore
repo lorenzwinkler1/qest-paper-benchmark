@@ -232,3 +232,4 @@ generated_benchmarks/
 output/
 
 *.lic
+artifactcontainer.tar
