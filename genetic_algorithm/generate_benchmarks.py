@@ -5,7 +5,7 @@ from benchmark_input import BenchmarkInput
 
 
 SEED = 0
-OUTPUT_DIR = "generated_benchmarks"
+OUTPUT_DIR = "genetic_algorithm/generated_benchmarks"
 
 # a random walk is described through its two polynomials and the probability p, as well as the initial expression
 # the same could be achieved through calling polar directly - we use the benchmarking-wrapper
@@ -48,22 +48,22 @@ NUM_RUNS = 5
 
 # (num_generations, min_population, max_population, population_decrease_degree, min_granularity, max_granularity, granularity_increase_degree, mutation_multiplier, crossover_multiplier)
 GENETIC_ALGORITHM_CONFIGS = [
-    (50, 20, 100, 1, 50, 50, 1, 5, 2),
-    (50, 20, 100, 1, 50, 200, 1, 5, 2),
-    (50, 20, 100, 1, 200, 200, 1, 5, 2),
-    (50, 100, 100, 1, 50, 50, 1, 5, 2),
-    (50, 100, 100, 1, 50, 200, 1, 5, 2),
-    (50, 100, 100, 1, 200, 200, 1, 5, 2),
+    (50, 20, 100, 1, 50, 50, 1, 5, 2, False),
+    (50, 20, 100, 1, 50, 200, 1, 5, 2, True),
+    (50, 20, 100, 1, 200, 200, 1, 5, 2, False),
+    (50, 100, 100, 1, 50, 50, 1, 5, 2, True),
+    (50, 100, 100, 1, 50, 200, 1, 5, 2, True),
+    (50, 100, 100, 1, 200, 200, 1, 5, 2, True),
 
-    (50, 20, 100, 1, 400, 400, 1, 5, 2),
-    (50, 100, 100, 1, 400, 400, 1, 5, 2),
-    (50, 100, 100, 1, 50, 400, 1, 5, 2),
-    (50, 20, 100, 1, 50, 400, 1, 5, 2)
+    (50, 20, 100, 1, 400, 400, 1, 5, 2, False),
+    (50, 100, 100, 1, 400, 400, 1, 5, 2, False),
+    (50, 100, 100, 1, 50, 400, 1, 5, 2, False),
+    (50, 20, 100, 1, 50, 400, 1, 5, 2, True)
 ]
 
 
 curr_seed = SEED
-for (j,(num_generations, min_population, max_population, population_decrease_degree, min_granularity, max_granularity, granularity_increase_degree, mutation_multiplier, crossover_multiplier)) in enumerate(GENETIC_ALGORITHM_CONFIGS):
+for (j,(num_generations, min_population, max_population, population_decrease_degree, min_granularity, max_granularity, granularity_increase_degree, mutation_multiplier, crossover_multiplier, do_output)) in enumerate(GENETIC_ALGORITHM_CONFIGS):
     for id, q1, p, q2, initial in RANDOM_WALKS:
         for i in range(NUM_RUNS):
             curr_seed+=2
@@ -85,6 +85,8 @@ for (j,(num_generations, min_population, max_population, population_decrease_deg
                 seed = curr_seed+1, mutationMultiplier=mutation_multiplier,crossoverMultiplier=crossover_multiplier, numRuns=1
                 )
                 filename = f"generated_{id}_{j}_{i}_exact.json"
-                with open(os.path.join(OUTPUT_DIR, filename), "w") as out_fp:
-                    out_fp.write(input.model_dump_json(by_alias=True))
+                if do_output:
+                    with open(os.path.join(OUTPUT_DIR, filename), "w") as out_fp:
+                        print(filename)
+                        out_fp.write(input.model_dump_json(by_alias=True))
 

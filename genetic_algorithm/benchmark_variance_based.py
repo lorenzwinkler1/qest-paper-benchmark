@@ -17,7 +17,7 @@ import json
 import pathlib
 from termination.variance_based.exponent_approximation.genetic_algorithm import estimate_bound_exponent_inductive_bound_genetic
 from sympy import Symbol, sympify
-from termination.variance_based.exponent_approximation.genetic_algorithm_config import MinMaxQuadraticAlgorithmConfig, GeneticAlgorithmConfig
+from termination.variance_based.exponent_approximation.genetic_algorithm_config import MinMaxGeneticAlgorithmConfig, GeneticAlgorithmConfig
 
 
 c_0 = 10e-7
@@ -27,11 +27,12 @@ NUM_REPETITIONS = 10
 N = Symbol("n", integer=True, positive=True)
 
 
-if len(sys.argv)!=3:
-    raise Exception("output dir and exactly one benchmark file required")
+if len(sys.argv)!=4:
+    raise Exception("solver, output dir and exactly one benchmark file required")
 
-OUTPUT_DIR = sys.argv[1]
-FILE = sys.argv[2]
+SOLVER = sys.argv[1]
+OUTPUT_DIR = sys.argv[2]
+FILE = sys.argv[3]
 OUTFILE_NAME = os.path.join(OUTPUT_DIR, FILE)
 
 with open(FILE) as fp:
@@ -59,9 +60,9 @@ for i in range(input_data.num_runs):
     time, witness = perform_experiment(sympify(input_data.q1, locals={'n': N}),
                                        input_data.percentage,
                                        sympify(input_data.q2, locals={'n': N}),
-                            MinMaxQuadraticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
+                            MinMaxGeneticAlgorithmConfig(input_data.num_generations, input_data.min_granularity, input_data.max_granularity, 
                                                             input_data.min_population, input_data.max_population,
-                                                            input_data.mutation_multiplier, input_data.crossover_multiplier,
+                                                            input_data.mutation_multiplier, input_data.crossover_multiplier, SOLVER,
                                                             input_data.population_decrease_degree,input_data.granularity_increase_degree), input_data.initial, input_data.exact_n0, int(rng.random()*1e16))
     times.append(time)
     exponents.append(witness.m)
