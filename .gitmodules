@@ -1,4 +1,4 @@
 [submodule "polar"]
 	path = genetic_algorithm/polar
 	url = git@github.com:probing-lab/polar.git
-	branch = add-amber-methodology
+	branch = termination

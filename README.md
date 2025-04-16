@@ -1,4 +1,5 @@
-This repo serves as a benchmark suite for the variance-based-termination of polar.
+This repository is the artifact submited for the paper "Positive Almost-Sure Termination of Polynomial Random Walks".
+
 
 
 # Genetic algorithm
@@ -20,6 +21,22 @@ To create a csv file (e.g. for plotting):
 
 ```
 find output/benchmarks/ -name "*.json" | python gather_benchmark_data.py > output.csv
+```
+
+## Testing the mounts
+```
+docker run --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t qestcontainer:latest python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_0_0_0_asymp.json
+```
+
+## Running all jobs
+First, set the desired numbers of simulatneous jobs:
+```
+docker run qestcontainer:latest tsp -S [number of jobs]
+```
+
+Then schedule all files
+```
+docker run --mount type=bind,src=./output/,target=/usr/src/app/output qestcontainer:latest run_all_jobs.sh
 ```
 
 # Empirical bounds

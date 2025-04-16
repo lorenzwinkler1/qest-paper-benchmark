@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo "Scheduling jobs with tsp..."
+
+find genetic_algorithm/generated_benchmarks/ -name "*0_asymp.json" | xargs -I{} tsp python genetic_algorithm/benchmark_variance_based.py output {}
+
+echo "Waiting for all jobs to finish..."
+
+tsp -S $1
+
+while true; do
+    queued=$(tsp | grep -c queued)
+    running=$(tsp | grep -c running)
+    finished=$(tsp | grep -c finished)
+
+    total=$((queued + running + finished))
+    
+    echo "Status: $queued queued | $running running | $finished finished"
+
+    # Break loop when no queued or running jobs left
+    if [[ $queued -eq 0 && $running -eq 0 ]]; then
+        break
+    fi
+
+    sleep 1
+done
+
+echo "All $finished jobs finished!"
+
+# Optional: keep container alive (comment out to let it exit)
+tail -f /dev/null

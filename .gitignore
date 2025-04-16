@@ -227,3 +227,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+generated_benchmarks/
+output/
