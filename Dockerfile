@@ -36,6 +36,10 @@ RUN R -e "install.packages('dplyr',dependencies=TRUE, repos='http://cran.rstudio
      R -e "if (!'dplyr' %in% rownames(installed.packages())) stop('dplyr not installed')"
 RUN R -e "install.packages('scales',dependencies=TRUE, repos='http://cran.rstudio.com/')" &&\
      R -e "if (!'scales' %in% rownames(installed.packages())) stop('scales not installed')"
+RUN R -e "install.packages('robustbase',dependencies=TRUE, repos='http://cran.rstudio.com/')" &&\
+     R -e "if (!'robustbase' %in% rownames(installed.packages())) stop('scales not installed')"
+RUN R -e "install.packages('rrcov',dependencies=TRUE, repos='http://cran.rstudio.com/')" &&\
+     R -e "if (!'rrcov' %in% rownames(installed.packages())) stop('scales not installed')"
 
 COPY genetic_algorithm/plot_scripts/running_times_quality.r genetic_algorithm/plot_scripts/running_times_quality.r
 
@@ -47,6 +51,8 @@ COPY random_walk/inputs/ random_walk/inputs/
 COPY random_walk/*.py random_walk/
 COPY run_empirical_bounds.sh run_empirical_bounds.sh
 RUN chmod +x run_empirical_bounds.sh
+COPY random_walk/plot_scripts/plot_random_walk_bound.r random_walk/plot_scripts/plot_random_walk_bound.r
+COPY random_walk/plot_scripts/random_walk_explicit_bounds.r random_walk/plot_scripts/random_walk_explicit_bounds.r
 
 RUN mkdir genetic_algorithm/generated_benchmarks
 

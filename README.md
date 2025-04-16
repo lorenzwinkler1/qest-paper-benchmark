@@ -26,13 +26,16 @@ find output/benchmarks/ -name "*.json" | python gather_benchmark_data.py > outpu
 # Reproducing our results
 
 ## Generate the benchmarks
+Run the following command, to create all the benchmarks. Make sure, that the folders `./generated_benchmarks/` and `./output/` exist in your working directory. The benchmarks will be saved as json files in `./generated_benchmarks/`.
+
 ```
 docker run --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t qestcontainer:latest python genetic_algorithm/generate_benchmarks.py
 ```
 
 ## Testing the mounts
+Next, test if the results are properly saved in the `output` folder
 ```
-docker run --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t qestcontainer:latest python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_0_0_0_asymp.json
+docker run --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t qestcontainer:latest python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_2_3_4_exact.json
 ```
 
 ## Running all jobs
