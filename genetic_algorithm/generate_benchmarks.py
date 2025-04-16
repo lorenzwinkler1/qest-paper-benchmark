@@ -74,8 +74,9 @@ for (j,(num_generations, min_population, max_population, population_decrease_deg
               seed = curr_seed, mutationMultiplier=mutation_multiplier,crossoverMultiplier=crossover_multiplier, numRuns=1
             )
             filename = f"generated_{id}_{j}_{i}_asymp.json"
-            with open(os.path.join(OUTPUT_DIR, filename), "w") as out_fp:
-                out_fp.write(input.model_dump_json(by_alias=True))
+            if do_output:
+                with open(os.path.join(OUTPUT_DIR, filename), "w") as out_fp:
+                    out_fp.write(input.model_dump_json(by_alias=True))
 
             if initial is not None:
                 input = BenchmarkInput(
