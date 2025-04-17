@@ -138,7 +138,7 @@ The prints all Ids of scheduled jobs. Due to a limit in the number of open file 
 
 There are two reason for jobs to usually fail. The first involves the programs, which involve the terms n**(1/4) and n**(1/2). We can not compute closed form expressions for their summation, hence the exact approximation failes. Those jobs correspond to the files "generated\_0\_\*\_exact.json" and "generated\_1\_\*\_exact.json" and they will *always* fail.
 
-A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run with `GUROBI`, this happened in $1/900$ run (`generated_16_7_4_asymp.json`).
+A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run with `GUROBI`, this happened in $1/900$ run (`generated_16_7_4_asymp.json`). If this issue appear in practice, rerunning the script (with a different seed, if it was set) should fix the issue.
 
 ### Collecting the results
 There is a helper script, to collect all json-result files and merge them into one csv file:
@@ -155,7 +155,7 @@ docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src
 ```
 The plots are created in the `./output/` directory
 
-## Empirical bounds
+## Empirical bounds (Duration: ~2 core-hours)
 These experiments perform a polynomial random walk with a specific sample size, to approximate the probability $P(T\geq n)$, as displayed in various figures in the paper.
 
 Here, just the `output` mount is required. The inputs are already contained in the docker image, and can be seen in the accompanying folders.
@@ -176,7 +176,7 @@ docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t poly
 and 
 
 ```
-docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest Rscript random_walk/plot_scripts/plot_random_walk_bound.r
+docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest Rscript random_walk/plot_scripts/random_walk_explicit_bounds.r
 ```
 
 For both scripts, the plots are again placed in `./output/`
