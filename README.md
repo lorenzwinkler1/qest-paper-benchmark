@@ -1,6 +1,6 @@
 [This repository](https://github.com/lorenzwinkler1/qest-paper-benchmark) is the artifact submited for the paper "Positive Almost-Sure Termination of Polynomial Random Walks".
 
-While for the submission a docker container is included, all the commands can be run without the docker commands (including mounts) in the beginning, and work locally, when all dependencies are installed (have a look at the Dockerfile for that - for python I suggest using `venv`).
+While for the submission a docker container is included, all the commands can be run outside of the docker container, and work locally, when all dependencies are installed (have a look at the Dockerfile for that - for python I suggest using `venv`).
 
 The tool itself is also available [in the termination branch of polar](https://github.com/probing-lab/polar/tree/termination), where you can find an installation guide in the Readme.md file.
 
@@ -23,6 +23,19 @@ docker image load -i artifactcontainer.tar
 
 The image has the tag `polynomial-random-walks:latest`
 
+## Obtain a shell in the container
+Obtain a shell inside the docker container. Alternatively, all subsequent commands could be run using `docker run [all the mounts] [command]`, but then the mounts have to be specified each time.
+
+create the following local directories:
+- `./license`
+- `./generated_benchmarks`
+- `./output`
+
+Run the following commands, replacing the placeholders with the absolute folder paths
+```
+docker run --mount type=bind,src=[absolute path to license folder],dst=/opt/gurobi --mount type=bind,src=[absolute path to generated_benchmarks folder],target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=[absolute path to output folder],target=/usr/src/app/output --mount type=bind,src=[absolute path to local examples folder],dst=/usr/src/app/examples -i -t polynomial-random-walks:latest bash
+```
+
 # Running the tool
 
 The tool leverages a linear solver. This can be passed via the `--solver` flag. Any value, which is accepted by [OR-tools](https://developers.google.com/optimization), can be passed here, but we require great numerical stability, hence some solvers do not work as desired. The default solver is `CLP`, as it can be used without installation, and performs quite stable. The faster solver `GUROBI` was used for the experimental results in our paper, and you can find information to install it below.
@@ -30,19 +43,19 @@ The tool leverages a linear solver. This can be passed via the `--solver` flag. 
 The tool can be invoked with `CLP` using:
 
 ```
-docker run --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
+python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
 ```
 
 Or when using gurobi:
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
+python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
 ```
 
 When you want to compute an `explicit` bound, you need to additionally pass the `--exact` flag:
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./examples,dst=/usr/src/app/examples -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance --exact
+python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance --exact
 ```
-
+python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
 Notice the mount of the `example`-folder: Here you can add polynomial random walks, or have a look at some of our example.
 
 ## Command-Line flags
@@ -74,6 +87,7 @@ This section provides instructions how to reproduce the results of Tables 1 and 
 ### Setting up the Gurobi license (Optional, but recommended for reproduction)
 
 A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
+Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
 
 - Create an account on gurobi.com with your academic E-Mail Adress
 - Via https://portal.gurobi.com/iam/licenses/request request a WLS academic license. 
@@ -84,27 +98,27 @@ WLSACCESSID=<access-id>
 WLSSECRET=<secret>
 LICENSEID=<license-id>
 ```
-- copy this license file into a folder `./license/`, relative to the working directory
-- This file can be directly used as an environment variable file. Just make sure, that whenever running `docker run`, to include the following mount: `--mount type=bind,src=./license,dst=/opt/gurobi` 
+- copy this license file into a folder `./license/` on the host machine
+- this ensures, that the license file is passed to the container, due to the mount.
 
 #### Checking, if the license works
 
 The following command has to work. Be advised, that when using `GUROBI`, network connection might be required.
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
+python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
 ```
 
 ### Generate the benchmarks
 Run the following command, to create all the benchmarks. Make sure, that the folders `./generated_benchmarks/` and `./output/` (in addition to `./license/`) exist in your working directory. The benchmarks will be saved as json files in `./generated_benchmarks/`.
 
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t polynomial-random-walks:latest python genetic_algorithm/generate_benchmarks.py
+python genetic_algorithm/generate_benchmarks.py
 ```
 
 ### Testing the mounts
 Next, test if the results are properly saved in the `output` folder
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t polynomial-random-walks:latest python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_2_3_4_exact.json
+python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_2_3_4_exact.json
 ```
 
 ### Running all genetic-algorithm jobs (Duration: ~700 core-hours)
@@ -113,7 +127,7 @@ _You find under `./results_paper/output_all.csv` already our output file. If you
 
 Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_all_jobs.sh [GUROBI|CLP] [number of jobs]
+./run_all_jobs.sh [GUROBI|CLP] [number of jobs]
 ```
 
 The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
@@ -125,11 +139,11 @@ _The_
 
 Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_jobs_less.sh [GUROBI|CLP] [number of jobs]
+./run_jobs_less.sh [GUROBI|CLP] [number of jobs]
 ```
 or for the even less cost intensive solver:
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_jobs_minimum.sh [GUROBI|CLP] [number of jobs]
+./run_jobs_minimum.sh [GUROBI|CLP] [number of jobs]
 ```
 
 The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
@@ -144,14 +158,14 @@ A job can also fail, when numerical issues arise in the bound computation. That 
 There is a helper script, to collect all json-result files and merge them into one csv file:
 
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest find output/genetic_algorithm/ -name "*.json" | python genetic_algorithm/gather_benchmark_data.py > output/output_all.csv
+find output/genetic_algorithm/ -name "*.json" | python genetic_algorithm/gather_benchmark_data.py > output/output_all.csv
 ```
 This places the output file in `./output/output_all.csv`
 
 ### Creating the plots
 The following command creates the plots, and simultaneously outputs the smallest found exponents and explicit bounds
 ```
-docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest Rscript genetic_algorithm/plot_scripts/running_times_quality.r
+Rscript genetic_algorithm/plot_scripts/running_times_quality.r
 ```
 The plots are created in the `./output/` directory
 
@@ -161,7 +175,7 @@ These experiments perform a polynomial random walk with a specific sample size, 
 Here, just the `output` mount is required. The inputs are already contained in the docker image, and can be seen in the accompanying folders.
 
 ```
-docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_empirical_bounds.sh [number of jobs]
+./run_empirical_bounds.sh [number of jobs]
 ```
 The output files measure the probability $P(T\geq n)$, but loking at them manually isn't very helpful. Therefore there are again two scripts for plotting.
 
@@ -170,13 +184,13 @@ The output files measure the probability $P(T\geq n)$, but loking at them manual
 There are two scripts used for creating plots:
 
 ```
-docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest Rscript random_walk/plot_scripts/plot_random_walk_bound.r
+Rscript random_walk/plot_scripts/plot_random_walk_bound.r
 ```
 
 and 
 
 ```
-docker run --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest Rscript random_walk/plot_scripts/random_walk_explicit_bounds.r
+Rscript random_walk/plot_scripts/random_walk_explicit_bounds.r
 ```
 
 For both scripts, the plots are again placed in `./output/`
@@ -191,11 +205,11 @@ git clone --recurse-submodules https://github.com/lorenzwinkler1/qest-paper-benc
 
 Build the docker image (can take 20-30 minutes, to install the dependencies)
 ```
-git build . -t polynomial-random-walks:latest
+docker build . -t polynomial-random-walks:latest
 ```
 
 Save the image to a tar file
 
 ```
-docker save qestcontainer:latest -o artifactcontainer.tar
+docker save polynomial-random-walks:latest -o artifactcontainer.tar
 ```

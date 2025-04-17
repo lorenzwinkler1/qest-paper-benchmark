@@ -28,6 +28,3 @@ while true; do
 done
 
 echo "All $finished jobs finished!"
-
-# Optional: keep container alive (comment out to let it exit)
-tail -f /dev/null
