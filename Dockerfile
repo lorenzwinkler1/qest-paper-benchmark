@@ -47,6 +47,10 @@ COPY genetic_algorithm/polar genetic_algorithm/polar
 COPY genetic_algorithm/*.py genetic_algorithm/
 COPY run_all_jobs.sh run_all_jobs.sh
 RUN chmod +x run_all_jobs.sh
+COPY run_jobs_less.sh run_jobs_less.sh
+RUN chmod +x run_jobs_less.sh
+COPY run_jobs_minimum.sh run_jobs_minimum.sh
+RUN chmod +x run_jobs_minimum.sh
 COPY random_walk/inputs/ random_walk/inputs/
 COPY random_walk/*.py random_walk/
 COPY run_empirical_bounds.sh run_empirical_bounds.sh

@@ -69,6 +69,8 @@ If unable to obtain the license, you can still try to obtain the same results, t
 
 
 ## Genetic Algorithm
+This section provides instructions how to reproduce the results of Tables 1 and 2, and Figure 9 in the appendix.
+
 ### Setting up the Gurobi license (Optional, but recommended for reproduction)
 
 A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
@@ -92,8 +94,6 @@ The following command has to work. Be advised, that when using `GUROBI`, network
 docker run --mount type=bind,src=./license,dst=/opt/gurobi -i -t polynomial-random-walks:latest python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
 ```
 
-
-
 ### Generate the benchmarks
 Run the following command, to create all the benchmarks. Make sure, that the folders `./generated_benchmarks/` and `./output/` (in addition to `./license/`) exist in your working directory. The benchmarks will be saved as json files in `./generated_benchmarks/`.
 
@@ -107,13 +107,29 @@ Next, test if the results are properly saved in the `output` folder
 docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output  -i -t polynomial-random-walks:latest python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_2_3_4_exact.json
 ```
 
-### Running all jobs (Duration: )
+### Running all genetic-algorithm jobs (Duration: ~700 core-hours)
 
 _You find under `./results_paper/output_all.csv` already our output file._
 
-Then schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
+Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
 ```
 docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_all_jobs.sh [GUROBI|CLP] [number of jobs]
+```
+
+The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
+
+### Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)
+To reproduce the main result of the the paper - tables 1 and 2, you can also just run one instance of the most cost-intensive solver, or an even less cost intensive solver.
+While the results will not be exactly the same as in the table, they will produce somewhat similar results.
+_The_
+
+Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
+```
+docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_jobs_less.sh [GUROBI|CLP] [number of jobs]
+```
+or for the even less cost intensive solver:
+```
+docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src=./generated_benchmarks/,target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=./output/,target=/usr/src/app/output -i -t polynomial-random-walks:latest ./run_jobs_minimum.sh [GUROBI|CLP] [number of jobs]
 ```
 
 The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
