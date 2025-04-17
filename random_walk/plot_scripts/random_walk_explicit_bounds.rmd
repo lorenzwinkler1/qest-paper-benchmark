@@ -1,8 +1,8 @@
 ```{r}
-data_imb_sym <- read.csv("../output/inputs/non-zero-mean/sym.json.csv")
-data_imb_2n <- read.csv("../output/inputs/non-zero-mean/2n.json.csv")
+data_imb_sym <- read.csv("../output/inputs/non_zero_mean/sym.json.csv")
+data_imb_2n <- read.csv("../output/inputs/non_zero_mean/2n.json.csv")
 data_lin_100 <- read.csv("../output/inputs/different_initial/lin_100.json.csv")
-data2L <- read.csv("../output/inputs/different_p/1e-2_L.json.csv")
+data2L <- read.csv("../output/inputs/different_p/1e_2_L.json.csv")
 
 data_lin_100 = data_lin_100[data_lin_100$i>0 &data_lin_100$p_t>0,]
 data_imb_n = data_imb_n[data_imb_n$i>0 &data_imb_n$p_t>0,]

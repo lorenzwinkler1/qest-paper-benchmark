@@ -72,14 +72,14 @@ ggsave("initial_value_plot.pdf",width=7, height=5)
 
 
 
-# Comparison of non-zero-means
+# Comparison of non_zero_means
 
 
 ```{r}
-data_imb_n <- read.csv("../output/inputs/non-zero-mean/n.json.csv")
-data_imb_const <- read.csv("../output/inputs/non-zero-mean/const.json.csv")
-data_imb_2n <- read.csv("../output/inputs/non-zero-mean/2n.json.csv")
-data_imb_sym <- read.csv("../output/inputs/non-zero-mean/sym.json.csv")
+data_imb_n <- read.csv("../output/inputs/non_zero_mean/n.json.csv")
+data_imb_const <- read.csv("../output/inputs/non_zero_mean/const.json.csv")
+data_imb_2n <- read.csv("../output/inputs/non_zero_mean/2n.json.csv")
+data_imb_sym <- read.csv("../output/inputs/non_zero_mean/sym.json.csv")
 
 data_imb_n = data_imb_n[data_imb_n$i>0 &data_imb_n$p_t>0,]
 data_imb_const = data_imb_const[data_imb_const$i>0 &data_imb_const$p_t>0,]
@@ -271,12 +271,12 @@ ggsave("termination_boundary.pdf",width=7, height=5)
 
 ```{r}
 data1 <- read.csv("../output/inputs/different_p/sym.json.csv")
-data2 <- read.csv("../output/inputs/different_p/1e-1_L.json.csv")
-data3 <- read.csv("../output/inputs/different_p/1e-1_R.json.csv")
-data4 <- read.csv("../output/inputs/different_p/1e-2_L.json.csv")
-data5 <- read.csv("../output/inputs/different_p/1e-2_R.json.csv")
-data6 <- read.csv("../output/inputs/different_p/1e-3_L.json.csv")
-data7 <- read.csv("../output/inputs/different_p/1e-3_R.json.csv")
+data2 <- read.csv("../output/inputs/different_p/1e_1_L.json.csv")
+data3 <- read.csv("../output/inputs/different_p/1e_1_R.json.csv")
+data4 <- read.csv("../output/inputs/different_p/1e_2_L.json.csv")
+data5 <- read.csv("../output/inputs/different_p/1e_2_R.json.csv")
+data6 <- read.csv("../output/inputs/different_p/1e_3_L.json.csv")
+data7 <- read.csv("../output/inputs/different_p/1e_3_R.json.csv")
 
 data1 = data1[data1$i>0 &data1$p_t>0,]
 data2 = data2[data2$i>0 &data2$p_t>0,]

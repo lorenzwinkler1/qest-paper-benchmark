@@ -4,6 +4,27 @@ While for the submission a docker container is included, all the commands can be
 
 The tool itself is also available [in the termination branch of polar](https://github.com/probing-lab/polar/tree/termination), where you can find an installation guide in the Readme.md file.
 
+- [Content](#content)
+- [Loading the docker image](#loading-the-docker-image)
+  - [Obtain a shell in the container](#obtain-a-shell-in-the-container)
+- [Running the tool](#running-the-tool)
+  - [Command-Line flags](#command-line-flags)
+- [Reproducing our results](#reproducing-our-results)
+  - [Genetic Algorithm](#genetic-algorithm)
+    - [Setting up the Gurobi license (Optional, but recommended for reproduction)](#setting-up-the-gurobi-license-optional-but-recommended-for-reproduction)
+      - [Checking, if the license works](#checking-if-the-license-works)
+    - [Generate the benchmarks](#generate-the-benchmarks)
+    - [Testing the mounts (Smoke test)](#testing-the-mounts-smoke-test)
+    - [Running all genetic-algorithm jobs (Duration: ~700 core-hours)](#running-all-genetic-algorithm-jobs-duration-700-core-hours)
+      - [Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)](#running-less-extensive-experiments-duration-90-core-hours--20-core-hours)
+      - [Failing jobs](#failing-jobs)
+    - [Collecting the results](#collecting-the-results)
+    - [Creating the plots](#creating-the-plots)
+  - [Empirical bounds (Duration: ~2 core-hours)](#empirical-bounds-duration-2-core-hours)
+    - [Generating the plots](#generating-the-plots)
+- [Rebuilding the docker image](#rebuilding-the-docker-image)
+
+
 # Content
 - `genetic_algorithm/` A folder containing the python and R source code for running the experiments involving polar (also the actual tool, `polar`, hence our source code is contained as a submodule)
 - `random_walk/` A folder containing the python and R source code for running the random walk experiments
@@ -27,13 +48,13 @@ The image has the tag `polynomial-random-walks:latest`
 Obtain a shell inside the docker container. Alternatively, all subsequent commands could be run using `docker run [all the mounts] [command]`, but then the mounts have to be specified each time.
 
 create the following local directories:
-- `./license`
+- `./gurobi_license`
 - `./generated_benchmarks`
 - `./output`
 
 Run the following commands, replacing the placeholders with the absolute folder paths
 ```
-docker run --mount type=bind,src=[absolute path to license folder],dst=/opt/gurobi --mount type=bind,src=[absolute path to generated_benchmarks folder],target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=[absolute path to output folder],target=/usr/src/app/output --mount type=bind,src=[absolute path to local examples folder],dst=/usr/src/app/examples -i -t polynomial-random-walks:latest bash
+docker run --mount type=bind,src=[absolute path to gurobi_license folder],dst=/opt/gurobi --mount type=bind,src=[absolute path to generated_benchmarks folder],target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=[absolute path to output folder],target=/usr/src/app/output --mount type=bind,src=[absolute path to local examples folder],dst=/usr/src/app/examples -i -t polynomial-random-walks:latest bash
 ```
 
 # Running the tool
@@ -78,7 +99,7 @@ Most importantly, there are the flags
 # Reproducing our results
 Our results can be reproduced, however we used the commercial solver `GUROBI` in our paper, for which a license must be obtained.
 
-If unable to obtain the license, you can still try to obtain the same results, through using the solver `CLP`. You just need an empty `./license/`-folder, for the mount to work, and replace all occurances of `GUROBI` with `CLP` in the commands.
+If unable to obtain the license, you can still try to obtain the same results, through using the solver `CLP`. You just need an empty `./gurobi_license/`-folder, for the mount to work, and replace all occurances of `GUROBI` with `CLP` in the commands.
 
 
 ## Genetic Algorithm
@@ -90,15 +111,16 @@ A `WLS Academic`-License will be required to use Gurobi. During license setup, a
 Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
 
 - Create an account on gurobi.com with your academic E-Mail Adress
-- Via https://portal.gurobi.com/iam/licenses/request request a WLS academic license. 
-- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download (and Download again in the popup), to obtain a license file. 
+  - Make sure to select ACADEMIC for your account type
+- Via https://portal.gurobi.com/iam/licenses/request request a **WLS academic license**. 
+- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download, then enter an application name. Then click and Download again in the popup, to obtain a license file. 
 - You get a license file containing the following three lines:
 ```
 WLSACCESSID=<access-id>
 WLSSECRET=<secret>
 LICENSEID=<license-id>
 ```
-- copy this license file into a folder `./license/` on the host machine
+- copy this license file into a folder `./gurobi_license/` on the host machine
 - this ensures, that the license file is passed to the container, due to the mount.
 
 #### Checking, if the license works
@@ -109,17 +131,18 @@ python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polyn
 ```
 
 ### Generate the benchmarks
-Run the following command, to create all the benchmarks. Make sure, that the folders `./generated_benchmarks/` and `./output/` (in addition to `./license/`) exist in your working directory. The benchmarks will be saved as json files in `./generated_benchmarks/`.
 
 ```
 python genetic_algorithm/generate_benchmarks.py
 ```
 
-### Testing the mounts
+### Testing the mounts (Smoke test)
 Next, test if the results are properly saved in the `output` folder
 ```
-python genetic_algorithm/benchmark_variance_based.py CLP output genetic_algorithm/generated_benchmarks/generated_2_3_4_exact.json
+python genetic_algorithm/benchmark_variance_based.py [GUROBI|CLP] output genetic_algorithm/generated_benchmarks/generated_2_3_0_exact.json
 ```
+
+**Check if an output file was generated in the `./output/genetic_algorithm/generated_benchmarks/`-folder.** If not, re-check the mounts.
 
 ### Running all genetic-algorithm jobs (Duration: ~700 core-hours)
 
