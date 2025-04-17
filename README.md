@@ -202,6 +202,8 @@ Here, just the `output` mount is required. The inputs are already contained in t
 ```
 The output files measure the probability $P(T\geq n)$, but loking at them manually isn't very helpful. Therefore there are again two scripts for plotting.
 
+**Due to high memory consumption, this can fail in the docker container when a high number of parallel jobs is selected.** If this happens, maybe increase the memory of the container, or just run one job at once (`./run_empirical_bounds.sh 1`)
+
 ### Generating the plots
 
 There are two scripts used for creating plots:
