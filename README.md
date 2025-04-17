@@ -1,6 +1,6 @@
 [This repository](https://github.com/lorenzwinkler1/qest-paper-benchmark) is the artifact submited for the paper "Positive Almost-Sure Termination of Polynomial Random Walks".
 
-While for the submission a docker container is included, all the commands can be run, without the docker commands (including mounts) in the beginning, and work locally, when all dependencies are installed (have a look at the Dockerfile for that).
+While for the submission a docker container is included, all the commands can be run without the docker commands (including mounts) in the beginning, and work locally, when all dependencies are installed (have a look at the Dockerfile for that - for python I suggest using `venv`).
 
 The tool itself is also available [in the termination branch of polar](https://github.com/probing-lab/polar/tree/termination), where you can find an installation guide in the Readme.md file.
 
@@ -109,7 +109,7 @@ docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src
 
 ### Running all genetic-algorithm jobs (Duration: ~700 core-hours)
 
-_You find under `./results_paper/output_all.csv` already our output file._
+_You find under `./results_paper/output_all.csv` already our output file. If you just want to run the evaluation copy it into the `output` folder and proceed to [creating the plots](#creating-the-plots)_
 
 Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
 ```
@@ -118,7 +118,7 @@ docker run --mount type=bind,src=./license,dst=/opt/gurobi --mount type=bind,src
 
 The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
 
-### Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)
+#### Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)
 To reproduce the main result of the the paper - tables 1 and 2, you can also just run one instance of the most cost-intensive solver, or an even less cost intensive solver.
 While the results will not be exactly the same as in the table, they will produce somewhat similar results.
 _The_
