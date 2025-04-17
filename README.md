@@ -4,6 +4,8 @@ While for the submission a docker container is included, all the commands can be
 
 The tool itself is also available [in the termination branch of polar](https://github.com/probing-lab/polar/tree/termination), where you can find an installation guide in the Readme.md file.
 
+
+
 - [Content](#content)
 - [Loading the docker image](#loading-the-docker-image)
   - [Obtain a shell in the container](#obtain-a-shell-in-the-container)
@@ -67,7 +69,7 @@ The tool can be invoked with `CLP` using:
 python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
 ```
 
-Or when using gurobi:
+Or when using gurobi (requires setup as described below):
 ```
 python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
 ```
@@ -193,6 +195,8 @@ Rscript genetic_algorithm/plot_scripts/running_times_quality.r
 The plots are created in the `./output/` directory
 
 ## Empirical bounds (Duration: ~2 core-hours)
+_You find under `./results_paper/random_walk/*` the output used for the plots from our paper_
+
 These experiments perform a polynomial random walk with a specific sample size, to approximate the probability $P(T\geq n)$, as displayed in various figures in the paper.
 
 Here, just the `output` mount is required. The inputs are already contained in the docker image, and can be seen in the accompanying folders.
