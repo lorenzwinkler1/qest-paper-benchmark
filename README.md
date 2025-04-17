@@ -122,7 +122,7 @@ The prints all Ids of scheduled jobs. Due to a limit in the number of open file 
 
 There are two reason for jobs to usually fail. The first involves the programs, which involve the terms n**(1/4) and n**(1/2). We can not compute closed form expressions for their summation, hence the exact approximation failes. Those jobs correspond to the files "generated\_0\_\*\_exact.json" and "generated\_1\_\*\_exact.json" and they will *always* fail.
 
-A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run, this did not happen.
+A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run with `GUROBI`, this happened in $1/900$ run (`generated_16_7_4_asymp.json`).
 
 ### Collecting the results
 There is a helper script, to collect all json-result files and merge them into one csv file:

@@ -10,6 +10,8 @@ library(scales)
 
 data <- read.csv("output/output_all.csv")
 
+# More accurate printing of tibbles
+options(pillar.sigfig = 10)
 
 
 rearranged_data = data%>% 
