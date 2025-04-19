@@ -6,17 +6,18 @@ The tool itself is also available [in the termination branch of polar](https://g
 
 
 
+
 - [Content](#content)
-- [Loading the docker image](#loading-the-docker-image)
+- [Setup](#setup)
   - [Obtain a shell in the container](#obtain-a-shell-in-the-container)
+  - [Optional: Setting up the Gurobi license (Optional, but recommended for reproduction)](#optional-setting-up-the-gurobi-license-optional-but-recommended-for-reproduction)
+      - [Checking, if the license works](#checking-if-the-license-works)
 - [Running the tool](#running-the-tool)
   - [Command-Line flags](#command-line-flags)
 - [Reproducing our results](#reproducing-our-results)
   - [Genetic Algorithm](#genetic-algorithm)
-    - [Setting up the Gurobi license (Optional, but recommended for reproduction)](#setting-up-the-gurobi-license-optional-but-recommended-for-reproduction)
-      - [Checking, if the license works](#checking-if-the-license-works)
     - [Generate the benchmarks](#generate-the-benchmarks)
-    - [Testing the mounts (Smoke test)](#testing-the-mounts-smoke-test)
+    - [Testing the mounts (Smoke test / TEST RUN for AE)](#testing-the-mounts-smoke-test--test-run-for-ae)
     - [Running all genetic-algorithm jobs (Duration: ~700 core-hours)](#running-all-genetic-algorithm-jobs-duration-700-core-hours)
       - [Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)](#running-less-extensive-experiments-duration-90-core-hours--20-core-hours)
       - [Failing jobs](#failing-jobs)
@@ -38,7 +39,7 @@ The tool itself is also available [in the termination branch of polar](https://g
 - `run_empirical_bounds.sh` A file to invoke all random-walk experiments
 - `/examples/` A folder containing examples on which the tool can be run. If you want to test your own polynomial random walk, place it here.
 
-# Loading the docker image
+# Setup
 The image can be loaded using 
 ```
 docker image load -i artifactcontainer.tar
@@ -58,6 +59,36 @@ Run the following commands, replacing the placeholders with the absolute folder 
 ```
 docker run --mount type=bind,src=[absolute path to gurobi_license folder],dst=/opt/gurobi --mount type=bind,src=[absolute path to generated_benchmarks folder],target=/usr/src/app/genetic_algorithm/generated_benchmarks --mount type=bind,src=[absolute path to output folder],target=/usr/src/app/output --mount type=bind,src=[absolute path to local examples folder],dst=/usr/src/app/examples -i -t polynomial-random-walks:latest bash
 ```
+You can use `Ctrl+C` at any time, to stop the command.
+
+## Optional: Setting up the Gurobi license (Optional, but recommended for reproduction)
+This step is Optional. Using `CLP` instead of `GUROBI` yielded similar (almost identical) results.
+However, the running time of `CLP` is about twice as long - especially for larger models (i.e. larger `granularity`). The times in Figure 9 in the paper also refer to `GUROBI`.
+Similarely, the durations which are displayed for the experiments below refer to `GUROBI`, hence you will need about twice the time for `CLP`
+
+A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
+Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
+
+- Create an account on gurobi.com with your academic E-Mail Adress
+  - Make sure to select ACADEMIC for your account type
+- Via https://portal.gurobi.com/iam/licenses/request request a **WLS academic license**. 
+- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download, then enter an application name. Then click and Download again in the popup, to obtain a license file. 
+- You get a license file containing the following three lines:
+```
+WLSACCESSID=<access-id>
+WLSSECRET=<secret>
+LICENSEID=<license-id>
+```
+- copy this license file into a folder `./gurobi_license/` on the host machine
+- this ensures, that the license file is passed to the container, due to the mount.
+
+#### Checking, if the license works
+
+The following command has to work. Be advised, that when using `GUROBI`, network connection might be required due to licensing.
+```
+python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
+```
+
 
 # Running the tool
 
@@ -69,7 +100,7 @@ The tool can be invoked with `CLP` using:
 python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance
 ```
 
-Or when using gurobi (requires setup as described below):
+Or when using gurobi (requires setup as described above):
 ```
 python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance --solver GUROBI
 ```
@@ -107,38 +138,13 @@ If unable to obtain the license, you can still try to obtain the same results, t
 ## Genetic Algorithm
 This section provides instructions how to reproduce the results of Tables 1 and 2, and Figure 9 in the appendix.
 
-### Setting up the Gurobi license (Optional, but recommended for reproduction)
-
-A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
-Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
-
-- Create an account on gurobi.com with your academic E-Mail Adress
-  - Make sure to select ACADEMIC for your account type
-- Via https://portal.gurobi.com/iam/licenses/request request a **WLS academic license**. 
-- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download, then enter an application name. Then click and Download again in the popup, to obtain a license file. 
-- You get a license file containing the following three lines:
-```
-WLSACCESSID=<access-id>
-WLSSECRET=<secret>
-LICENSEID=<license-id>
-```
-- copy this license file into a folder `./gurobi_license/` on the host machine
-- this ensures, that the license file is passed to the container, due to the mount.
-
-#### Checking, if the license works
-
-The following command has to work. Be advised, that when using `GUROBI`, network connection might be required.
-```
-python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
-```
-
 ### Generate the benchmarks
 
 ```
 python genetic_algorithm/generate_benchmarks.py
 ```
 
-### Testing the mounts (Smoke test)
+### Testing the mounts (Smoke test / TEST RUN for AE)
 Next, test if the results are properly saved in the `output` folder
 ```
 python genetic_algorithm/benchmark_variance_based.py [GUROBI|CLP] output genetic_algorithm/generated_benchmarks/generated_2_3_0_exact.json
@@ -160,7 +166,7 @@ The prints all Ids of scheduled jobs. Due to a limit in the number of open file 
 #### Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)
 To reproduce the main result of the the paper - tables 1 and 2, you can also just run one instance of the most cost-intensive solver, or an even less cost intensive solver.
 While the results will not be exactly the same as in the table, they will produce somewhat similar results.
-_The_
+_For the minimum script, you also find an output file in the results folder_
 
 Schedule all files. The first argument is the solver to use, and the second argument is the number of simultaneous jobs
 ```
@@ -177,7 +183,7 @@ The prints all Ids of scheduled jobs. Due to a limit in the number of open file 
 
 There are two reason for jobs to usually fail. The first involves the programs, which involve the terms n**(1/4) and n**(1/2). We can not compute closed form expressions for their summation, hence the exact approximation failes. Those jobs correspond to the files "generated\_0\_\*\_exact.json" and "generated\_1\_\*\_exact.json" and they will *always* fail.
 
-A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run with `GUROBI`, this happened in $1/900$ run (`generated_16_7_4_asymp.json`). If this issue appear in practice, rerunning the script (with a different seed, if it was set) should fix the issue.
+A job can also fail, when numerical issues arise in the bound computation. That is, the validation of the inductive bound fails - This is not supposed to happen, but especially when using a different solver than GUROBI, it can be the case. In our test run with `GUROBI`, this happened in $1/900$ run (`generated_16_7_4_asymp.json`). If this issue appears in practice, rerunning the script (with a different seed, if it was set) should fix the issue.
 
 ### Collecting the results
 There is a helper script, to collect all json-result files and merge them into one csv file:
@@ -195,7 +201,7 @@ Rscript genetic_algorithm/plot_scripts/running_times_quality.r
 The plots are created in the `./output/` directory
 
 ## Empirical bounds (Duration: ~2 core-hours)
-_You find under `./results_paper/random_walk/*` the output used for the plots from our paper_
+_You find under `./results_paper/random_walk/*` the output used for the plots from our paper - to recreate the plots, unzip it into `output` (keeping the `random_walk`-folder as a subfolder)_
 
 These experiments perform a polynomial random walk with a specific sample size, to approximate the probability $P(T\geq n)$, as displayed in various figures in the paper.
 
