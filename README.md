@@ -71,7 +71,7 @@ python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --terminat
 
 Or when using gurobi (requires setup as described below):
 ```
-python genetic_algorithm/polar/polar.py genetic_algorithm/polar/benchmarks/polynomial_random_walks/example_1_paper.prob --termination_variance --solver GUROBI
+python genetic_algorithm/polar/polar.py examples/example_1_paper.prob --termination_variance --solver GUROBI
 ```
 
 When you want to compute an `explicit` bound, you need to additionally pass the `--exact` flag:
