@@ -66,13 +66,13 @@ This step is Optional. Using `CLP` instead of `GUROBI` yielded similar (almost i
 However, the running time of `CLP` is about twice as long - especially for larger models (i.e. larger `granularity`). The times in Figure 9 in the paper also refer to `GUROBI`.
 Similarely, the durations which are displayed for the experiments below refer to `GUROBI`, hence you will need about twice the time for `CLP`
 
-A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an *academic network* is required.
+A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an **academic network** is required.
 Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
 
-- Create an account on gurobi.com with your academic E-Mail Adress
+- Create an account on [gurobi.com](gurobi.com) with your academic E-Mail Adress
   - Make sure to select ACADEMIC for your account type
-- Via https://portal.gurobi.com/iam/licenses/request request a **WLS academic license**. 
-- On https://license.gurobi.com/manager/licenses/ you should see your license. You can click on Download, then enter an application name. Then click and Download again in the popup, to obtain a license file. 
+- Via [https://portal.gurobi.com/iam/licenses/request](https://portal.gurobi.com/iam/licenses/request) request a **WLS academic license**. 
+- On [https://license.gurobi.com/manager/licenses/](https://license.gurobi.com/manager/licenses/) you should see your license. You can click on Download, then enter an application name. Then click on Download again to obtain a license file. 
 - You get a license file containing the following three lines:
 ```
 WLSACCESSID=<access-id>
