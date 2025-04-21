@@ -69,7 +69,7 @@ Similarely, the durations which are displayed for the experiments below refer to
 A `WLS Academic`-License will be required to use Gurobi. During license setup, a connection via an **academic network** is required.
 Later, a network connection (not necessarily academic) is required when running the tool (due to licensing reasons).
 
-- Create an account on [gurobi.com](gurobi.com) with your academic E-Mail Adress
+- Create an account on [gurobi.com](https://gurobi.com) with your academic E-Mail Adress
   - Make sure to select ACADEMIC for your account type
 - Via [https://portal.gurobi.com/iam/licenses/request](https://portal.gurobi.com/iam/licenses/request) request a **WLS academic license**. 
 - On [https://license.gurobi.com/manager/licenses/](https://license.gurobi.com/manager/licenses/) you should see your license. You can click on Download, then enter an application name. Then click on Download again to obtain a license file. 
@@ -161,7 +161,7 @@ Schedule all files. The first argument is the solver to use, and the second argu
 ./run_all_jobs.sh [GUROBI|CLP] [number of jobs]
 ```
 
-The prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
+The command prints all Ids of scheduled jobs. Due to a limit in the number of open file descriptors, *this can appear to have stalled*, but this probably is not the case. After a few minutes, you should see the first result files in the output directory.
 
 #### Running less extensive experiments (Duration: ~90 core-hours / ~20 core-hours)
 To reproduce the main result of the the paper - tables 1 and 2, you can also just run one instance of the most cost-intensive solver, or an even less cost intensive solver.
