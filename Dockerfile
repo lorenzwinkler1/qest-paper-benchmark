@@ -58,6 +58,8 @@ RUN chmod +x run_empirical_bounds.sh
 COPY random_walk/plot_scripts/plot_random_walk_bound.r random_walk/plot_scripts/plot_random_walk_bound.r
 COPY random_walk/plot_scripts/random_walk_explicit_bounds.r random_walk/plot_scripts/random_walk_explicit_bounds.r
 
+COPY random_walk/compute_empiric_stopping_time.py random_walk/compute_empiric_stopping_time.py
+
 RUN mkdir genetic_algorithm/generated_benchmarks
 
 COPY random_walk/*.py random_walk/

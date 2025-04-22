@@ -215,10 +215,15 @@ reg3 = rlm(log(p_t)~log(i), data=data3[data3$i>1e3 & data3$i<1e5,], weights=1/i)
 reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>2e2 & data4$i<1e3,], weights=1/i)
 reg5 = rlm(log(p_t)~log(i), data=data5[data5$i>12 & data5$i<1e3,], weights=1/i)
 
+print("--------Regression for linear symmetric random walk--------")
 reg1
+print("--------Regression for squareroot symmetric random walk--------")
 reg2
+print("--------Regression for qubicroot symmetric random walk--------")
 reg3
+print("--------Regression for quadratic symmetric random walk--------")
 reg4
+print("--------Regression for pow5 symmetric random walk--------")
 reg5
 
 
@@ -297,19 +302,24 @@ reg4 = rlm(log(p_t)~log(i), data=data4[data4$i>3e3 & data4$p_t>1e-6,], weights=1
 reg5 = rlm(log(p_t)~log(i), data=data5[data5$i>8e2 & data5$p_t>1e-6,], weights=1/i)
 reg6 = rlm(log(p_t)~log(i), data=data6[data6$i>1e4 & data6$p_t>1e-6,], weights=1/i)
 reg7 = rlm(log(p_t)~log(i), data=data7[data7$i>1e3 & data7$p_t>1e-6,], weights=1/i)
+
+print("--------Regression for pow3 symmetric random walk--------")
 reg1
 
-
+print("--------Regression for pow3 p=0.9 random walk--------")
 reg2
+print("--------Regression for pow3 p=0.1 random walk--------")
 reg3
 
 
-
+print("--------Regression for pow3 p=0.99 random walk--------")
 reg4
+print("--------Regression for pow3 p=0.01 random walk--------")
 reg5
 
-
+print("--------Regression for pow3 p=0.999 random walk--------")
 reg6
+print("--------Regression for pow3 p=0.001 random walk--------")
 reg7
 
 

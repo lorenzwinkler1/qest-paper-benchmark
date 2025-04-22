@@ -25,6 +25,7 @@ The tool itself is also available [in the termination branch of polar](https://g
     - [Creating the plots](#creating-the-plots)
   - [Empirical bounds (Duration: ~2 core-hours)](#empirical-bounds-duration-2-core-hours)
     - [Generating the plots](#generating-the-plots)
+    - [Computing the empirical stopping time](#computing-the-empirical-stopping-time)
 - [Rebuilding the docker image](#rebuilding-the-docker-image)
 
 
@@ -194,7 +195,7 @@ find output/genetic_algorithm/ -name "*.json" | python genetic_algorithm/gather_
 This places the output file in `./output/output_all.csv`
 
 ### Creating the plots
-The following command creates the plots, and simultaneously outputs the smallest found exponents and explicit bounds
+The following command creates the plots, and simultaneously outputs the smallest found exponents and explicit bounds, which are the values in Column 4 and 7 of Table 1 and 2 respectively.
 ```
 Rscript genetic_algorithm/plot_scripts/running_times_quality.r
 ```
@@ -228,8 +229,23 @@ and
 Rscript random_walk/plot_scripts/random_walk_explicit_bounds.r
 ```
 
-For both scripts, the plots are again placed in `./output/`
+For both scripts, the plots are again placed in `./output/`.
 
+The first script additionally outputs the computed regression lines of Column 3 in Table 1.
+
+### Computing the empirical stopping time
+This corresponds to Column 6 of Table 2.
+
+The following commands correspond to the rows (in the same order)
+```
+python random_walk/compute_empiric_stopping_time.py output/random_walk/inputs/different_initial/lin_100.json.csv
+
+python random_walk/compute_empiric_stopping_time.py output/random_walk/inputs/non_zero_mean/sym.json.csv
+
+python random_walk/compute_empiric_stopping_time.py output/random_walk/inputs/non_zero_mean/2n.json.csv
+
+python random_walk/compute_empiric_stopping_time.py output/random_walk/inputs/different_p/1e_2_L.json.csv
+```
 
 # Rebuilding the docker image 
 
