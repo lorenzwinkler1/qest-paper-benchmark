@@ -37,6 +37,8 @@ The tool itself is also available [in the termination branch of polar](https://g
 - `License`
 - `Dockerfile` A file to rebuild the image `artifactcontainer.tar`
 - `run_all_jobs.sh` A file to invoke all experiments using `polar`
+- `run_jobs_less.sh` A file to invoke a smaller set of experiments using `polar`
+- `run_jobs_minimal.sh` A file to invoke an even smaller set of experiments using `polar`
 - `run_empirical_bounds.sh` A file to invoke all random-walk experiments
 - `/examples/` A folder containing examples on which the tool can be run. If you want to test your own polynomial random walk, place it here.
 
